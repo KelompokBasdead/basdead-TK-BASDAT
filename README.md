@@ -1,4 +1,3 @@
-# basdead-TK-BASDAT
 # Kelompok BASDEAD
 
 ## Anggota Kelompok
