@@ -1,5 +1,9 @@
 # Proyek Basis Data (TK) - Studi Kasus 1
 
+<<<<<<< HEAD
+=======
+## Identitas Kelompok
+>>>>>>> origin/feat-chevinka
 **Nama Kelompok:** Basdead  
 **Studi Kasus:** Studi Kasus 1 (TikTakTuk - Platform Tiket)
 
