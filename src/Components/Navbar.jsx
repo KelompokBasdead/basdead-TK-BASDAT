@@ -58,7 +58,7 @@ const navItems = {
     main: [
       { label: "Jelajahi Acara", href: "/events" },
       { label: "Venue", href: "/venues" },
-      { label: "Artis", href: "#" },
+      { label: "Artis", href: "/artists" },
       { label: "Promosi", href: "/promotions" },
     ],
     sub: [
