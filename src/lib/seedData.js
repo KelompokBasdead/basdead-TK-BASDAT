@@ -74,13 +74,13 @@ export const venues = [
 
 export const artists = [
   { artist_id: "80b3b8b1-02b6-42b5-9fb3-9c002c369deb", name: "Fourtwnty", genre: "Indie Folk" },
-  { artist_id: "2c626f2c-38ae-424c-b176-c735ebbef550", name: "Nadin Amizah", genre: "Pop" },
-  { artist_id: "50bebb90-f825-4ade-96bd-e11a2847bdca", name: "Raisa", genre: "Pop" },
-  { artist_id: "6ee0a606-2ea0-4ee3-bc9b-4baf833931b4", name: "Tulus", genre: "Pop Jazz" },
-  { artist_id: "df2c481f-80da-44d3-b464-8e15c9d4d355", name: "Isyana Sarasvati", genre: "Pop" },
-  { artist_id: "1942c5ff-99b1-48f2-b861-2be84a6d2314", name: "Kunto Aji", genre: "Pop" },
-  { artist_id: "54548c63-01b8-4204-9ec3-f0f2d29cf52b", name: "Slank", genre: "Rock" },
-  { artist_id: "bb8e1d3c-1aa2-441c-99e3-4207ad8e5d3d", name: "Dewa 19", genre: "Rock" },
+  { artist_id: "2c626f2c-38ae-424c-b176-c735ebbef550", name: "Hindia", genre: "Indie Pop" },
+  { artist_id: "50bebb90-f825-4ade-96bd-e11a2847bdca", name: "Tulus", genre: "Pop" },
+  { artist_id: "6ee0a606-2ea0-4ee3-bc9b-4baf833931b4", name: "Nadin Amizah", genre: "Folk" },
+  { artist_id: "df2c481f-80da-44d3-b464-8e15c9d4d355", name: "Pamungkas", genre: "Singer-Songwriter" },
+  { artist_id: "1942c5ff-99b1-48f2-b861-2be84a6d2314", name: "Raisa", genre: "R&B / Pop" },
+  { artist_id: "54548c63-01b8-4204-9ec3-f0f2d29cf52b", name: "Dewa 19", genre: "Rock" },
+  { artist_id: "bb8e1d3c-1aa2-441c-99e3-4207ad8e5d3d", name: "Sheila On 7", genre: "Pop Rock" },
 ];
 
 export const events = [
