@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
 const roleLabels = {
@@ -26,14 +26,14 @@ const navItems = {
       { label: "Manajemen Venue", href: "/venues" },
       { label: "Manajemen Kursi", href: "/seats" },
       { label: "Kategori Tiket", href: "/ticket-categories" },
-      { label: "Manajemen Tiket", href: "#" },
+      { label: "Manajemen Tiket", href: "/my-tickets" },
       { label: "Semua Order", href: "/orders" },
       { label: "Promosi", href: "/promotions" },
 
     ],
     sub: [
-      { label: "Tiket", badge: "Aset", href: "#" },
-      { label: "Order", badge: "Aset", href: "#" },
+      { label: "Tiket", badge: "Aset", href: "/my-tickets" },
+      { label: "Order", badge: "Aset", href: "/orders" },
       { label: "Profile", href: "/profile" },
     ]
   },
@@ -43,14 +43,14 @@ const navItems = {
       { label: "Manajemen Venue", href: "/venues" },
       { label: "Manajemen Kursi", href: "/seats" },
       { label: "Kategori Tiket", href: "/ticket-categories" },
-      { label: "Manajemen Tiket", href: "#" },
+      { label: "Manajemen Tiket", href: "/my-tickets" },
       { label: "Semua Order", href: "/orders" },
       { label: "Promosi", href: "/promotions" },
 
     ],
     sub: [
-      { label: "Tiket", badge: "Aset", href: "#" },
-      { label: "Order", badge: "Aset", href: "#" },
+      { label: "Tiket", badge: "Aset", href: "/my-tickets" },
+      { label: "Order", badge: "Aset", href: "/orders" },
       { label: "Profile", href: "/profile" },
     ]
   },
@@ -72,6 +72,7 @@ const navItems = {
 export default function Navbar({ mode = "dashboard" }) {
   const [role, setRole] = useState("admin");
   const pathname = usePathname();
+  const router = useRouter();
 
   const activeRole = mode === "public" ? "guest" : role;
   const items = useMemo(() => navItems[activeRole] ?? navItems.guest, [activeRole]);
@@ -88,6 +89,10 @@ export default function Navbar({ mode = "dashboard" }) {
     setRole(nextRole);
     window.localStorage.setItem("basdead-role", nextRole);
     window.dispatchEvent(new CustomEvent("basdead-role-change", { detail: nextRole }));
+    
+    if (nextRole === "guest") {
+      router.push("/");
+    }
   }
 
   return (
