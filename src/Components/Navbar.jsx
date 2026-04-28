@@ -91,17 +91,17 @@ export default function Navbar({ mode = "dashboard" }) {
       
       {/* Top Row */}
       <div className="relative flex h-[58px] items-center border-b border-white/5">
-        <div className="mr-9 flex shrink-0 items-center gap-3">
-          <div className="flex h-[38px] w-[38px] items-center justify-center rounded-[11px] bg-gradient-to-br from-[#8b5cf6] to-[#6d28d9] text-[13px] font-bold tracking-tight text-white shadow-[0_0_18px_rgba(139,92,246,0.45),0_2px_6px_rgba(0,0,0,0.4)] transition-shadow hover:shadow-[0_0_26px_rgba(139,92,246,0.65),0_2px_8px_rgba(0,0,0,0.4)] cursor-default select-none">
+        <Link href={mode === "public" ? "/" : "/dashboard"} className="group mr-9 flex shrink-0 items-center gap-3 decoration-transparent">
+          <div className="flex h-[38px] w-[38px] items-center justify-center rounded-[11px] bg-gradient-to-br from-[#8b5cf6] to-[#6d28d9] text-[13px] font-bold tracking-tight text-white shadow-[0_0_18px_rgba(139,92,246,0.45),0_2px_6px_rgba(0,0,0,0.4)] transition-shadow group-hover:shadow-[0_0_26px_rgba(139,92,246,0.65),0_2px_8px_rgba(0,0,0,0.4)] select-none">
             TT
           </div>
-          <div className="flex flex-col leading-none cursor-default select-none">
-            <span className="text-[15px] font-bold tracking-tight text-white">TikTakTuk</span>
-            <span className="mt-[3px] text-[9px] font-semibold uppercase tracking-[1.6px] text-[#a78bfa]">
+          <div className="flex flex-col leading-none select-none">
+            <span className="text-[15px] font-bold tracking-tight text-white transition-colors group-hover:text-purple-200">TikTakTuk</span>
+            <span className="mt-[3px] text-[9px] font-semibold uppercase tracking-[1.6px] text-[#a78bfa] transition-colors group-hover:text-purple-300">
               Platform Tiket
             </span>
           </div>
-        </div>
+        </Link>
 
         <div className="no-scrollbar flex flex-1 items-center gap-0.5 overflow-x-auto">
           {items.main.map((item) => {
