@@ -32,15 +32,9 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link 
               href="/login"
-              className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-purple-500 text-white font-bold text-sm shadow-[0_0_20px_rgba(139,92,246,0.3)] transition-all hover:bg-purple-600 hover:shadow-[0_0_30px_rgba(139,92,246,0.5)] hover:-translate-y-0.5"
+              className="w-full sm:w-auto px-10 py-3.5 rounded-xl bg-purple-500 text-white font-bold text-sm shadow-[0_0_20px_rgba(139,92,246,0.3)] transition-all hover:bg-purple-600 hover:shadow-[0_0_30px_rgba(139,92,246,0.5)] hover:-translate-y-0.5"
             >
-              Mulai Sekarang
-            </Link>
-            <Link 
-              href="/events"
-              className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white/5 border border-white/10 text-white font-bold text-sm transition-all hover:bg-white/10 hover:border-white/20"
-            >
-              Jelajahi Acara
+              Mulai Sekarang (Login)
             </Link>
           </div>
         </div>
