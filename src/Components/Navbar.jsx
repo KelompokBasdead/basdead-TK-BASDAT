@@ -24,8 +24,8 @@ const navItems = {
     main: [
       { label: "Acara Saya", href: "/events" },
       { label: "Manajemen Venue", href: "/venues" },
-      { label: "Manajemen Kursi", href: "#" },
-      { label: "Kategori Tiket", href: "#" },
+      { label: "Manajemen Kursi", href: "/seats" },
+      { label: "Kategori Tiket", href: "/ticket-categories" },
       { label: "Manajemen Tiket", href: "#" },
       { label: "Semua Order", href: "/orders" },
       { label: "Promosi", href: "/promotions" },
@@ -34,15 +34,15 @@ const navItems = {
     sub: [
       { label: "Tiket", badge: "Aset", href: "#" },
       { label: "Order", badge: "Aset", href: "#" },
-      { label: "Profile", href: "#" },
+      { label: "Profile", href: "/profile" },
     ]
   },
   organizer: {
     main: [
       { label: "Acara Saya", href: "/events" },
       { label: "Manajemen Venue", href: "/venues" },
-      { label: "Manajemen Kursi", href: "#" },
-      { label: "Kategori Tiket", href: "#" },
+      { label: "Manajemen Kursi", href: "/seats" },
+      { label: "Kategori Tiket", href: "/ticket-categories" },
       { label: "Manajemen Tiket", href: "#" },
       { label: "Semua Order", href: "/orders" },
       { label: "Promosi", href: "/promotions" },
@@ -51,7 +51,7 @@ const navItems = {
     sub: [
       { label: "Tiket", badge: "Aset", href: "#" },
       { label: "Order", badge: "Aset", href: "#" },
-      { label: "Profile", href: "#" },
+      { label: "Profile", href: "/profile" },
     ]
   },
   customer: {
@@ -62,7 +62,7 @@ const navItems = {
       { label: "Promosi", href: "/promotions" },
     ],
     sub: [
-      { label: "Tiket Saya", href: "#" },
+      { label: "Tiket Saya", href: "/my-tickets" },
       { label: "Pesanan", href: "/orders" },
       { label: "Logout", href: "/login" },
     ]
