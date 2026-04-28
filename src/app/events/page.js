@@ -3,6 +3,7 @@
 import Navbar from "../../Components/Navbar";
 import { artists, events as eventSeed, organizers, venues } from "../../lib/seedData";
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 
 const emptyEvent = {
   event_id: "",
@@ -251,9 +252,9 @@ function EventCard({ event, canManage, onEdit }) {
         <p className="line-clamp-2 text-xs text-slate-500 flex-1">{event.description}</p>
         
         <div className="mt-2 flex gap-2">
-          <button className="flex-1 rounded-lg bg-purple-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-purple-600">
-            Beli Tiket
-          </button>
+        <Link href="/checkout" className="flex-1 rounded-lg bg-purple-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-purple-600 text-center">
+          Beli Tiket
+        </Link>
           {canManage && (
             <button
               onClick={onEdit}

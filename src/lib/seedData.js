@@ -179,3 +179,49 @@ export const events = [
   },
 ];
 
+export const orders = [
+  {
+    order_id: "ord_001",
+    order_date: "2024-04-10T14:32:00",
+    payment_status: "lunas",
+    total_amount: 1200000,
+    customer_id: "cust_001",
+    customer_name: "Budi Santoso",
+  },
+  {
+    order_id: "ord_002",
+    order_date: "2024-04-11T09:15:00",
+    payment_status: "lunas",
+    total_amount: 150000,
+    customer_id: "cust_001",
+    customer_name: "Budi Santoso",
+  },
+  {
+    order_id: "ord_003",
+    order_date: "2024-04-12T18:44:00",
+    payment_status: "pending",
+    total_amount: 1500000,
+    customer_id: "cust_002",
+    customer_name: "Siti Rahayu",
+  },
+  {
+    order_id: "ord_004",
+    order_date: "2024-04-13T11:00:00",
+    payment_status: "dibatalkan",
+    total_amount: 700000,
+    customer_id: "cust_002",
+    customer_name: "Siti Rahayu",
+  },
+];
+
+export const promotions = [
+  { promo_id: "promo_001", kode: "TIKTAK20", tipe: "persentase", nilai: 20, mulai: "2024-01-01", berakhir: "2024-12-31", terpakai: 45, limit: 100 },
+  { promo_id: "promo_002", kode: "HEMAT50K", tipe: "nominal", nilai: 50000, mulai: "2024-01-01", berakhir: "2024-12-31", terpakai: 12, limit: 50 },
+  { promo_id: "promo_003", kode: "NEWUSER30", tipe: "persentase", nilai: 30, mulai: "2024-03-01", berakhir: "2024-06-30", terpakai: 87, limit: 200 },
+];
+
+export const users = [
+  { username: "admin1", password: "admin123", role: "admin" },
+  { username: "organizer1", password: "org123", role: "organizer" },
+  { username: "customer1", password: "cust123", role: "customer" },
+];
