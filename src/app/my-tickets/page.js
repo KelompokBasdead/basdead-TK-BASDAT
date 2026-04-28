@@ -118,8 +118,14 @@ export default function MyTicketsPage() {
       status: "Valid",
       seat_id: createForm.seat_id || null,
     };
+    
+    // Mutate global dummy data so it persists across page navigations
+    TICKETS.unshift(newTicket);
+    
     if (createForm.seat_id) {
-      setHasRel((prev) => [...prev, { seat_id: createForm.seat_id, ticket_id: newTicket.ticket_id }]);
+      const newRel = { seat_id: createForm.seat_id, ticket_id: newTicket.ticket_id };
+      HAS_RELATIONSHIP.push(newRel);
+      setHasRel((prev) => [...prev, newRel]);
     }
     setTickets((prev) => [newTicket, ...prev]);
     setShowCreate(false);
@@ -135,6 +141,12 @@ export default function MyTicketsPage() {
   }
 
   function handleUpdate() {
+    // Mutate global dummy data
+    const tIdx = TICKETS.findIndex(t => t.ticket_id === selectedTicket.ticket_id);
+    if (tIdx !== -1) {
+      TICKETS[tIdx] = { ...TICKETS[tIdx], status: updateForm.status, seat_id: updateForm.seat_id || null };
+    }
+
     setTickets((prev) =>
       prev.map((t) =>
         t.ticket_id === selectedTicket.ticket_id
@@ -145,7 +157,16 @@ export default function MyTicketsPage() {
     // update has_relationship if seat changed
     setHasRel((prev) => {
       const filtered = prev.filter((r) => r.ticket_id !== selectedTicket.ticket_id);
-      if (updateForm.seat_id) return [...filtered, { seat_id: updateForm.seat_id, ticket_id: selectedTicket.ticket_id }];
+      
+      // Remove from global array
+      const relIdx = HAS_RELATIONSHIP.findIndex((r) => r.ticket_id === selectedTicket.ticket_id);
+      if (relIdx !== -1) HAS_RELATIONSHIP.splice(relIdx, 1);
+      
+      if (updateForm.seat_id) {
+        const newRel = { seat_id: updateForm.seat_id, ticket_id: selectedTicket.ticket_id };
+        HAS_RELATIONSHIP.push(newRel); // Add to global
+        return [...filtered, newRel];
+      }
       return filtered;
     });
     setShowUpdate(false);
@@ -158,6 +179,13 @@ export default function MyTicketsPage() {
   }
 
   function handleDelete() {
+    // Mutate global dummy data
+    const tIdx = TICKETS.findIndex(t => t.ticket_id === selectedTicket.ticket_id);
+    if (tIdx !== -1) TICKETS.splice(tIdx, 1);
+    
+    const rIdx = HAS_RELATIONSHIP.findIndex((r) => r.ticket_id === selectedTicket.ticket_id);
+    if (rIdx !== -1) HAS_RELATIONSHIP.splice(rIdx, 1);
+
     setHasRel((prev) => prev.filter((r) => r.ticket_id !== selectedTicket.ticket_id));
     setTickets((prev) => prev.filter((t) => t.ticket_id !== selectedTicket.ticket_id));
     setShowDelete(false);
