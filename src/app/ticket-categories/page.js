@@ -5,9 +5,8 @@ import Navbar from "@/components/Navbar";
 
 export default function TicketCategoriesPage() {
   const [role, setRole] = useState("guest");
-  const [isModalOpen, setModalOpen] = useState(false);
-
-  // Mock data based on the TK03 spec
+  
+  // Data mock kategori tiket
   const [categories, setCategories] = useState([
     { id: "tc_001", event: "Konser Melodi Senja", name: "WVIP", price: 1500000, quota: 50 },
     { id: "tc_002", event: "Konser Melodi Senja", name: "VIP", price: 750000, quota: 150 },
@@ -19,30 +18,92 @@ export default function TicketCategoriesPage() {
     { id: "tc_008", event: "Malam Akustik Bandung", name: "Regular", price: 350000, quota: 400 },
   ]);
 
+  // States untuk modal Tambah
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [newCategory, setNewCategory] = useState({ event: "Konser Melodi Senja", name: "", price: "", quota: "" });
+
+  // States untuk modal Edit
+  const [isEditModalOpen, setEditModalOpen] = useState(false);
+  const [editFormData, setEditFormData] = useState({ id: "", event: "", name: "", price: "", quota: "" });
+
+  // State untuk modal Delete
+  const [categoryToDelete, setCategoryToDelete] = useState(null);
+
   // Synchronize role from localStorage
   useEffect(() => {
     const currentRole = window.localStorage.getItem("basdead-role") || "guest";
     setRole(currentRole);
-
+    
     const handleRoleChange = (e) => setRole(e.detail);
     window.addEventListener("basdead-role-change", handleRoleChange);
+    
     return () => window.removeEventListener("basdead-role-change", handleRoleChange);
   }, []);
 
   // Calculate dynamic stats
   const stats = useMemo(() => {
     const totalKategori = categories.length;
-    const totalKuota = categories.reduce((sum, cat) => sum + cat.quota, 0);
-    const hargaTertinggi = Math.max(...categories.map(cat => cat.price), 0);
+    const totalKuota = categories.reduce((sum, cat) => sum + Number(cat.quota), 0);
+    const hargaTertinggi = Math.max(...categories.map(cat => Number(cat.price)), 0);
+    
     return { totalKategori, totalKuota, hargaTertinggi };
   }, [categories]);
 
   const hasModifyAccess = role === "admin" || role === "organizer";
 
+  // --- HANDLERS ---
+
+  // Handle Tambah
+  const handleAddCategory = (e) => {
+    e.preventDefault();
+    if (!newCategory.name || !newCategory.price || !newCategory.quota) return;
+
+    const newId = `tc_${Date.now()}`;
+    setCategories([
+      { 
+        id: newId, 
+        ...newCategory, 
+        price: Number(newCategory.price), 
+        quota: Number(newCategory.quota) 
+      }, 
+      ...categories
+    ]);
+    
+    setNewCategory({ event: "Konser Melodi Senja", name: "", price: "", quota: "" });
+    setModalOpen(false);
+  };
+
+  // Handle Edit
+  const handleEditSubmit = (e) => {
+    e.preventDefault();
+    if (!editFormData.name || !editFormData.price || !editFormData.quota) return;
+
+    setCategories(
+      categories.map((cat) => 
+        cat.id === editFormData.id 
+          ? { 
+              ...editFormData, 
+              price: Number(editFormData.price), 
+              quota: Number(editFormData.quota) 
+            } 
+          : cat
+      )
+    );
+
+    setEditModalOpen(false);
+  };
+
+  // Handle Delete
+  const handleDeleteConfirm = () => {
+    if (!categoryToDelete) return;
+    setCategories(categories.filter(cat => cat.id !== categoryToDelete.id));
+    setCategoryToDelete(null);
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 font-sans pb-12">
       <Navbar mode={role === "guest" ? "public" : "authenticated"} />
-
+      
       {/* Dark & Soft Purple Header */}
       <div className="bg-gradient-to-br from-[#0f0c29] via-[#141428] to-[#1a1040] py-16">
         <div className="max-w-7xl mx-auto px-6">
@@ -65,8 +126,7 @@ export default function TicketCategoriesPage() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 -mt-8 relative z-10">
-        
+      <div className="max-w-7xl mx-auto px-6 -mt-8 relative z-10">         
         {/* Stats Section */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
@@ -116,13 +176,26 @@ export default function TicketCategoriesPage() {
                   <tr key={cat.id} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
                     <td className="py-4 px-6 font-semibold text-slate-800">{cat.name}</td>
                     <td className="py-4 px-6 font-medium text-slate-500">{cat.event}</td>
-                    <td className="py-4 px-6 font-semibold text-purple-600">Rp {cat.price.toLocaleString('id-ID')}</td>
+                    <td className="py-4 px-6 font-semibold text-purple-600">Rp {Number(cat.price).toLocaleString('id-ID')}</td>
                     <td className="py-4 px-6 font-medium text-slate-600">{cat.quota} tiket</td>
                     
                     {hasModifyAccess && (
                       <td className="py-4 px-6 text-right">
-                        <button className="text-slate-400 hover:text-purple-500 mr-4 font-medium transition-colors">Edit</button>
-                        <button className="text-slate-400 hover:text-red-500 font-medium transition-colors">Hapus</button>
+                        <button 
+                          onClick={() => {
+                            setEditFormData(cat);
+                            setEditModalOpen(true);
+                          }}
+                          className="text-slate-400 hover:text-purple-500 mr-4 font-medium transition-colors"
+                        >
+                          Edit
+                        </button>
+                        <button 
+                          onClick={() => setCategoryToDelete(cat)}
+                          className="text-slate-400 hover:text-red-500 font-medium transition-colors"
+                        >
+                          Hapus
+                        </button>
                       </td>
                     )}
                   </tr>
@@ -133,47 +206,172 @@ export default function TicketCategoriesPage() {
         </div>
       </div>
 
-      {/* Modal CUD */}
+      {/* Modal Tambah Kategori */}
       {isModalOpen && hasModifyAccess && (
-        <div className="fixed inset-0 bg-slate-900/50 flex items-center justify-center p-4 z-50">
+        <div className="fixed inset-0 bg-slate-900/60 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
           <div className="bg-white rounded-2xl w-full max-w-lg p-6 shadow-xl">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-bold text-slate-800">Tambah Kategori Baru</h2>
               <button onClick={() => setModalOpen(false)} className="text-slate-400 hover:text-slate-600 text-2xl leading-none">&times;</button>
             </div>
             
-            <div className="space-y-4">
+            <form onSubmit={handleAddCategory} className="space-y-4">
               <div>
                 <label className="block text-xs font-bold text-slate-500 mb-1">ACARA *</label>
-                <select className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-medium text-slate-800 focus:outline-none focus:border-purple-400 transition-all">
+                <select 
+                  required
+                  value={newCategory.event}
+                  onChange={(e) => setNewCategory({...newCategory, event: e.target.value})}
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-medium text-slate-800 focus:outline-none focus:border-purple-400 transition-all"
+                >
                   <option>Konser Melodi Senja</option>
                   <option>Festival Seni Budaya</option>
+                  <option>Malam Akustik Bandung</option>
                 </select>
               </div>
-
               <div>
                 <label className="block text-xs font-bold text-slate-500 mb-1">NAMA KATEGORI *</label>
-                <input type="text" placeholder="cth. WVIP" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-medium text-slate-800 focus:outline-none focus:border-purple-400 transition-all" />
+                <input 
+                  type="text" 
+                  required
+                  value={newCategory.name}
+                  onChange={(e) => setNewCategory({...newCategory, name: e.target.value})}
+                  placeholder="cth. WVIP" 
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-medium text-slate-800 focus:outline-none focus:border-purple-400 transition-all" 
+                />
               </div>
-
               <div className="flex gap-4">
                 <div className="flex-1">
                   <label className="block text-xs font-bold text-slate-500 mb-1">HARGA (RP) *</label>
-                  <input type="number" placeholder="750000" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-medium text-slate-800 focus:outline-none focus:border-purple-400 transition-all" />
+                  <input 
+                    type="number" 
+                    required
+                    min="0"
+                    value={newCategory.price}
+                    onChange={(e) => setNewCategory({...newCategory, price: e.target.value})}
+                    placeholder="750000" 
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-medium text-slate-800 focus:outline-none focus:border-purple-400 transition-all" 
+                  />
                 </div>
                 <div className="flex-1">
                   <label className="block text-xs font-bold text-slate-500 mb-1">KUOTA *</label>
-                  <input type="number" placeholder="100" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-medium text-slate-800 focus:outline-none focus:border-purple-400 transition-all" />
+                  <input 
+                    type="number" 
+                    required
+                    min="1"
+                    value={newCategory.quota}
+                    onChange={(e) => setNewCategory({...newCategory, quota: e.target.value})}
+                    placeholder="100" 
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-medium text-slate-800 focus:outline-none focus:border-purple-400 transition-all" 
+                  />
                 </div>
               </div>
+              
+              <div className="flex gap-3 mt-8 justify-end">
+                <button type="button" onClick={() => setModalOpen(false)} className="px-5 py-2.5 rounded-xl font-semibold text-slate-600 hover:bg-slate-100 transition-all">
+                  Batal
+                </button>
+                <button type="submit" className="bg-purple-500 hover:bg-purple-600 text-white font-semibold px-6 py-2.5 rounded-xl transition-all shadow-sm">
+                  Tambah
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Edit Kategori */}
+      {isEditModalOpen && hasModifyAccess && (
+        <div className="fixed inset-0 bg-slate-900/60 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl w-full max-w-lg p-6 shadow-xl">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-bold text-slate-800">Edit Kategori</h2>
+              <button onClick={() => setEditModalOpen(false)} className="text-slate-400 hover:text-slate-600 text-2xl leading-none">&times;</button>
             </div>
             
-            <div className="flex gap-3 mt-8 justify-end">
-              <button onClick={() => setModalOpen(false)} className="px-5 py-2.5 rounded-xl font-semibold text-slate-600 hover:bg-slate-100 transition-all">
+            <form onSubmit={handleEditSubmit} className="space-y-4">
+              <div>
+                <label className="block text-xs font-bold text-slate-500 mb-1">ACARA *</label>
+                <select 
+                  required
+                  value={editFormData.event}
+                  onChange={(e) => setEditFormData({...editFormData, event: e.target.value})}
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-medium text-slate-800 focus:outline-none focus:border-purple-400 transition-all"
+                >
+                  <option>Konser Melodi Senja</option>
+                  <option>Festival Seni Budaya</option>
+                  <option>Malam Akustik Bandung</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-500 mb-1">NAMA KATEGORI *</label>
+                <input 
+                  type="text" 
+                  required
+                  value={editFormData.name}
+                  onChange={(e) => setEditFormData({...editFormData, name: e.target.value})}
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-medium text-slate-800 focus:outline-none focus:border-purple-400 transition-all" 
+                />
+              </div>
+              <div className="flex gap-4">
+                <div className="flex-1">
+                  <label className="block text-xs font-bold text-slate-500 mb-1">HARGA (RP) *</label>
+                  <input 
+                    type="number" 
+                    required
+                    min="0"
+                    value={editFormData.price}
+                    onChange={(e) => setEditFormData({...editFormData, price: e.target.value})}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-medium text-slate-800 focus:outline-none focus:border-purple-400 transition-all" 
+                  />
+                </div>
+                <div className="flex-1">
+                  <label className="block text-xs font-bold text-slate-500 mb-1">KUOTA *</label>
+                  <input 
+                    type="number" 
+                    required
+                    min="1"
+                    value={editFormData.quota}
+                    onChange={(e) => setEditFormData({...editFormData, quota: e.target.value})}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-medium text-slate-800 focus:outline-none focus:border-purple-400 transition-all" 
+                  />
+                </div>
+              </div>
+              
+              <div className="flex gap-3 mt-8 justify-end">
+                <button type="button" onClick={() => setEditModalOpen(false)} className="px-5 py-2.5 rounded-xl font-semibold text-slate-600 hover:bg-slate-100 transition-all">
+                  Batal
+                </button>
+                <button type="submit" className="bg-purple-500 hover:bg-purple-600 text-white font-semibold px-6 py-2.5 rounded-xl transition-all shadow-sm">
+                  Simpan
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Konfirmasi Hapus Kategori */}
+      {categoryToDelete && hasModifyAccess && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl">
+            <h2 className="mb-2 text-xl font-bold text-red-600">Hapus Kategori</h2>
+            <p className="mb-6 text-sm text-slate-600">
+              Apakah Anda yakin ingin menghapus kategori <strong className="text-slate-800">{categoryToDelete.name}</strong> dari acara <strong className="text-slate-800">{categoryToDelete.event}</strong>? Tindakan ini tidak dapat dibatalkan.
+            </p>
+            
+            <div className="flex justify-end gap-3">
+              <button 
+                onClick={() => setCategoryToDelete(null)} 
+                className="rounded-xl px-5 py-2.5 font-semibold text-slate-600 transition-all hover:bg-slate-100"
+              >
                 Batal
               </button>
-              <button className="bg-purple-500 hover:bg-purple-600 text-white font-semibold px-6 py-2.5 rounded-xl transition-all shadow-sm">
-                Tambah
+              <button 
+                onClick={handleDeleteConfirm} 
+                className="rounded-xl bg-red-500 px-6 py-2.5 font-semibold text-white shadow-sm transition-all hover:bg-red-600"
+              >
+                Hapus
               </button>
             </div>
           </div>
