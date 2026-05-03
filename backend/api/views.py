@@ -42,6 +42,8 @@ def add_artist(request):
             return JsonResponse({"message": "Artist created successfully!"}, status=201)
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=500)
+        
+    return JsonResponse({"error": "Method not allowed"}, status=405)
 
 @csrf_exempt
 def update_artist(request, artist_id):
@@ -62,6 +64,8 @@ def update_artist(request, artist_id):
             return JsonResponse({"message": "Artist updated successfully!"})
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=500)
+        
+    return JsonResponse({"error": "Method not allowed"}, status=405)
 
 @csrf_exempt
 def delete_artist(request, artist_id):
@@ -78,6 +82,8 @@ def delete_artist(request, artist_id):
             return JsonResponse({"message": "Artist deleted successfully!"})
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=500)
+    
+    return JsonResponse({"error": "Method not allowed"}, status=405)
 
 def get_ticket_categories(request):
     if request.method == 'GET':
@@ -100,6 +106,8 @@ def get_ticket_categories(request):
             
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=500)
+        
+    return JsonResponse({"error": "Method not allowed"}, status=405)
 
 @csrf_exempt
 def add_ticket_category(request):
@@ -120,6 +128,8 @@ def add_ticket_category(request):
             return JsonResponse({"message": "Category created successfully!"}, status=201)
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=500)
+    
+    return JsonResponse({"error": "Method not allowed"}, status=405)
 
 @csrf_exempt
 def update_ticket_category(request, category_id):
@@ -140,6 +150,8 @@ def update_ticket_category(request, category_id):
             return JsonResponse({"message": "Category updated successfully!"})
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=500)
+    
+    return JsonResponse({"error": "Method not allowed"}, status=405)
 
 @csrf_exempt
 def delete_ticket_category(request, category_id):
@@ -156,3 +168,5 @@ def delete_ticket_category(request, category_id):
             return JsonResponse({"message": "Category deleted successfully!"})
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=500)
+    
+    return JsonResponse({"error": "Method not allowed"}, status=405)
