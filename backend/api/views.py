@@ -85,7 +85,6 @@ def get_ticket_categories(request):
             conn = psycopg2.connect(DB_URL)
             cursor = conn.cursor(cursor_factory=RealDictCursor)
             
-            # Joining with the event table so the frontend knows what event the ticket is for
             query = """
                 SELECT tc.*, e.event_title 
                 FROM ticket_category tc
