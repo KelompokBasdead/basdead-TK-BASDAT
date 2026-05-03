@@ -1,24 +1,26 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# --- FRONTEND CONFIG ---
+
 # dependencies
-/node_modules
-/.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
+frontend/node_modules/
+frontend/.pnp
+frontend/.pnp.*
+frontend/.yarn/*
+!frontend/.yarn/patches
+!frontend/.yarn/plugins
+!frontend/.yarn/releases
+!frontend/.yarn/versions
 
 # testing
-/coverage
+frontend/coverage
 
 # next.js
-/.next/
-/out/
+frontend/.next/
+frontend/out/
 
 # production
-/build
+frontend/build
 
 # misc
 .DS_Store
@@ -34,8 +36,29 @@ yarn-error.log*
 .env*
 
 # vercel
+frontend/.vercel
 .vercel
 
 # typescript
 *.tsbuildinfo
-next-env.d.ts
+frontend/next-env.d.ts
+
+
+# --- BACKEND CONFIG ---
+
+# Python Virtual Environment
+backend/env/
+venv/
+ENV/
+
+# Python Bytecode & Cache
+**/__pycache__/
+*.py[cod]
+*$py.class
+
+# Local Database
+backend/db.sqlite3
+
+# Django files
+backend/static/
+backend/media/
